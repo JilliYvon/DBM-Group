@@ -401,7 +401,7 @@ public class Table
     } // join
 
     /************************************************************************************
-     * Armaity
+     * Ruthvik
      * Join this table and table2 by performing a "theta-join".  Tuples from both tables
      * are compared attribute1 <op> attribute2.  Disambiguate attribute names by appending "2"
      * to the end of any duplicate attribute name.  Implement using a Nested Loop Join algorithm.
