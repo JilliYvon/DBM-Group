@@ -168,6 +168,7 @@ public class Table
     //----------------------------------------------------------------------------------
 
     /************************************************************************************
+     * Nehaa
      * Project the tuples onto a lower dimension by keeping only the given attributes.
      * Check whether the original key is included in the projection.
      *
@@ -208,6 +209,7 @@ public class Table
     } // select
 
     /************************************************************************************
+     * Nehaa
      * Select the tuples satisfying the given simple condition on attributes/constants
      * compared using an <op> ==, !=, <, <=, >, >=.
      *
@@ -290,6 +292,7 @@ public class Table
     } // select
 
     /************************************************************************************
+     * Armaity
      * Union this table and table2.  Check that the two tables are compatible.
      *
      * #usage movie.union (show)
@@ -310,6 +313,7 @@ public class Table
     } // union
 
     /************************************************************************************
+     * Armaity
      * Take the difference of this table and table2.  Check that the two tables are
      * compatible.
      *
@@ -335,6 +339,7 @@ public class Table
     } // minus
 
     /************************************************************************************
+     * Ruthvik
      * Join this table and table2 by performing an "equi-join".  Tuples from both tables
      * are compared requiring attributes1 to equal attributes2.  Disambiguate attribute
      * names by appending "2" to the end of any duplicate attribute name.  Implement using
@@ -396,6 +401,7 @@ public class Table
     } // join
 
     /************************************************************************************
+     * Armaity
      * Join this table and table2 by performing a "theta-join".  Tuples from both tables
      * are compared attribute1 <op> attribute2.  Disambiguate attribute names by appending "2"
      * to the end of any duplicate attribute name.  Implement using a Nested Loop Join algorithm.
@@ -491,6 +497,7 @@ public class Table
     } // i_join
 
     /************************************************************************************
+     * Luke
      * Join this table and table2 by performing an NATURAL JOIN.  Tuples from both tables
      * are compared requiring common attributes to be equal.  The duplicate column is also
      * eliminated.
@@ -705,6 +712,7 @@ public class Table
     } // extract
 
     /************************************************************************************
+     * Luke
      * Check the size of the tuple (number of elements in array) as well as the type of
      * each value to ensure it is from the right domain. 
      *
