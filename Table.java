@@ -354,11 +354,45 @@ public class Table
         var t_attrs = attributes1.split (" ");
         var u_attrs = attributes2.split (" ");
         var rows    = new ArrayList <Comparable []> ();
+        //@author Ruthvik Mankari
+        var attributes_length = t_attrs.length;
 
-        //  T O   B E   I M P L E M E N T E D 
+        // Nested loop to iterate over the tuples of both tables and find matching tuples
+        for (var Table1_Tuple : this.tuples) {
+            for (var Table2_Tuple : table2.tuples) {
+                boolean flag = true; // Flag to track if the current pair of tuples matches
+                for(int i=0;i<attributes_length;i++) {
+                    int attribute1_index = col(t_attrs[i]);
+                    int attribute2_index = table2.col(u_attrs[i]);
+                    if(Table1_Tuple[attribute1_index] != Table2_Tuple[attribute2_index]){
+                        flag = false; // If any attribute doesn't match, set the flag to false
+                        break;
+                    }
+                }
 
-        return new Table (name + count++, concat (attribute, table2.attribute),
-                                          concat (domain, table2.domain), key, rows);
+                // If all attributes match, add the concatenated tuple to the result list
+                if(flag){
+                    rows.add(concat(Table1_Tuple, Table2_Tuple));
+                }
+            }
+        }
+
+        // Disambiguate attribute names by appending "2" to any duplicate attribute name
+        var newAttributes = new ArrayList<String>();
+        newAttributes.addAll(Arrays.asList(this.attribute));
+        var Table1_Attributes = new HashSet<String>(Arrays.asList(this.attribute));
+        for (var attr : table2.attribute) {
+            if (Table1_Attributes.contains(attr)) {
+                newAttributes.add(attr + "2"); // Disambiguate by appending "2"
+            } else {
+                newAttributes.add(attr); // Otherwise, add the attribute name as is
+            }
+        }
+        String[] newAttributesArray = newAttributes.toArray(new String[0]);
+
+        // Return the result table with new attributes and matching tuples
+        return new Table (name + count++, newAttributesArray,
+                                          concat (domain, table2.domain), concat(key,table2.key), rows);
     } // join
 
     /************************************************************************************
@@ -377,11 +411,66 @@ public class Table
         out.println (STR."RA> \{name}.join (\{condition}, \{table2.name})");
 
         var rows = new ArrayList <Comparable []> ();
+        //@author Ruthvik Mankari
+        // Split the condition into attribute names and operator
+        var condition_split = condition.split (" ");
+        String attribute1 = condition_split[0];
+        String op = condition_split[1];
+        String attribute2 = condition_split[2];
 
-        //  T O   B E   I M P L E M E N T E D
+        // Nested loop to compare tuples from both tables based on the condition
+        for (var Table1_Tuple : this.tuples) {
+            for (var Table2_Tuple : table2.tuples) {
+                boolean flag = true;
+                    int attribute1_index = col(attribute1);
+                    int attribute2_index = table2.col(attribute2);
 
-        return new Table (name + count++, concat (attribute, table2.attribute),
-                                          concat (domain, table2.domain), key, rows);
+                //Switch based on operator and perform the operation accordingly
+                switch (op) {
+                    case "==":
+                        flag = Table1_Tuple[attribute1_index].compareTo(Table2_Tuple[attribute2_index]) == 0;
+                        break;
+                    case "!=":
+                        flag = Table1_Tuple[attribute1_index].compareTo(Table2_Tuple[attribute2_index]) != 0;
+                        break;
+                    case "<":
+                        flag = Table1_Tuple[attribute1_index].compareTo(Table2_Tuple[attribute2_index]) < 0;
+                        break;
+                    case "<=":
+                        flag = Table1_Tuple[attribute1_index].compareTo(Table2_Tuple[attribute2_index]) <= 0;
+                        break;
+                    case ">":
+                        flag = Table1_Tuple[attribute1_index].compareTo(Table2_Tuple[attribute2_index]) > 0;
+                        break;
+                    case ">=":
+                        flag = Table1_Tuple[attribute1_index].compareTo(Table2_Tuple[attribute2_index]) >= 0;
+                        break;
+                }
+
+                // If the condition is met, add the concatenated tuple to the result list
+                if(flag){
+                    rows.add(concat(Table1_Tuple, Table2_Tuple));
+                }
+            }
+
+        }
+
+        // Disambiguate attribute names by appending "2" to duplicates
+        var newAttributes = new ArrayList<String>();
+        newAttributes.addAll(Arrays.asList(this.attribute));
+        var Table1_Attributes = new HashSet<String>(Arrays.asList(this.attribute));
+        for (var attr : table2.attribute) {
+            if (Table1_Attributes.contains(attr)) {
+                newAttributes.add(attr + "2"); // Disambiguate by appending "2"
+            } else {
+                newAttributes.add(attr); // Otherwise, add the attribute name as is
+            }
+        }
+        String[] newAttributesArray = newAttributes.toArray(new String[0]);
+
+        // Return the result table with new attributes and matching tuples
+        return new Table (name + count++, newAttributesArray,
+                                          concat (domain, table2.domain), concat(key,table2.key), rows);
     } // join
 
     /************************************************************************************
