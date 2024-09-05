@@ -1,4 +1,3 @@
-
 /*****************************************************************************************
  * @file  MovieDB.java
  *
@@ -23,22 +22,22 @@ class MovieDB
         out.println ();
 
         var movie = new Table ("movie", "title year length genre studioName producerNo",
-                                        "String Integer Integer String String Integer", "title year");
+                "String Integer Integer String String Integer", "title year");
 
         var cinema = new Table ("cinema", "title year length genre studioName producerNo",
-                                          "String Integer Integer String String Integer", "title year");
+                "String Integer Integer String String Integer", "title year");
 
         var movieStar = new Table ("movieStar", "name address gender birthdate",
-                                                "String String Character String", "name");
+                "String String Character String", "name");
 
         var starsIn = new Table ("starsIn", "movieTitle movieYear starName",
-                                            "String Integer String", "movieTitle movieYear starName");
+                "String Integer String", "movieTitle movieYear starName");
 
         var movieExec = new Table ("movieExec", "certNo name address fee",
-                                                "Integer String String Float", "certNo");
+                "Integer String String Float", "certNo");
 
         var studio = new Table ("studio", "name address presNo",
-                                          "String String Integer", "name");
+                "String String Integer", "name");
 
         var film0 = new Comparable [] { "Star_Wars", 1977, 124, "sciFi", "Fox", 12345 };
         var film1 = new Comparable [] { "Star_Wars_2", 1980, 124, "sciFi", "Fox", 12345 };
@@ -106,7 +105,7 @@ class MovieDB
 
         out.println ();
         var t_select = movie.select (t -> t[movie.col("title")].equals ("Star_Wars") &&
-                                          t[movie.col("year")].equals (1977));
+                t[movie.col("year")].equals (1977));
         t_select.print ();
 
         //--------------------- select: <
