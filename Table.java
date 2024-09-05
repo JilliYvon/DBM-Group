@@ -5,7 +5,7 @@
  * @author   John Miller
  *
  * compile javac --enable-preview --release 21 *.java
- * run     java --enable-preview MovieDB    
+ * run     java --enable-preview MovieDB
  */
 
 import java.io.*;
@@ -25,7 +25,7 @@ import static java.lang.System.out;
  * Missing are update and delete data manipulation operators.
  */
 public class Table
-       implements Serializable
+        implements Serializable
 {
     /** Relative path for storage directory
      */
@@ -58,7 +58,7 @@ public class Table
      */
     private final List <Comparable []> tuples;
 
-    /** Primary key (the attributes forming). 
+    /** Primary key (the attributes forming).
      */
     private final String [] key;
 
@@ -80,12 +80,12 @@ public class Table
     private static Map <KeyType, Comparable []> makeMap ()
     {
         return switch (mType) {
-        case NO_MAP      -> null;
-        case TREE_MAP    -> new TreeMap <> ();
-        case HASH_MAP    -> new HashMap <> ();
+            case NO_MAP      -> null;
+            case TREE_MAP    -> new TreeMap <> ();
+            case HASH_MAP    -> new HashMap <> ();
        /*case LINHASH_MAP -> new LinHashMap <> (KeyType.class, Comparable [].class);
         case BPTREE_MAP  -> new BpTreeMap <> (KeyType.class, Comparable [].class);*/
-        default          -> null;
+            default          -> null;
         }; // switch
     } // makeMap
 
@@ -116,7 +116,7 @@ public class Table
      * @param _attribute  the string containing attributes names
      * @param _domain     the string containing attribute domains (data types)
      * @param _key        the primary key
-     */  
+     */
     public Table (String _name, String [] _attribute, Class [] _domain, String [] _key)
     {
         name      = _name;
@@ -136,7 +136,7 @@ public class Table
      * @param _domain     the string containing attribute domains (data types)
      * @param _key        the primary key
      * @param _tuples     the list of tuples containing the data
-     */  
+     */
     public Table (String _name, String [] _attribute, Class [] _domain, String [] _key,
                   List <Comparable []> _tuples)
     {
@@ -168,12 +168,11 @@ public class Table
     //----------------------------------------------------------------------------------
 
     /************************************************************************************
-     * Nehaa
      * Project the tuples onto a lower dimension by keeping only the given attributes.
      * Check whether the original key is included in the projection.
      *
      * #usage movie.project ("title year studioNo")
-     *
+     * @author Nehaa Umapathy
      * @param attributes  the attributes to project onto
      * @return  a table of projected tuples
      */
@@ -186,7 +185,16 @@ public class Table
 
         List <Comparable []> rows = new ArrayList <> ();
 
-        //  T O   B E   I M P L E M E N T E D 
+        //    T O   B E   I M P L E M E N T E D
+        int a = attrs.length;
+        for (var t : tuples) {
+            var temp = new Comparable[attrs.length]; //(attrs.length);
+            for (int i = 0; i < attrs.length; i++) {
+                int colNo = col(attrs[i]);
+                temp[i] = t[colNo];
+            } // for each attribute
+            rows.add(temp);
+        } // for each tuple
 
         return new Table (name + count++, attrs, colDomain, newKey, rows);
     } // project
@@ -204,17 +212,17 @@ public class Table
         out.println (STR."RA> \{name}.select (\{predicate})");
 
         return new Table (name + count++, attribute, domain, key,
-                   tuples.stream ().filter (t -> predicate.test (t))
-                                   .collect (Collectors.toList ()));
+                tuples.stream ().filter (t -> predicate.test (t))
+                        .collect (Collectors.toList ()));
     } // select
 
     /************************************************************************************
-     * Nehaa
+     * 
      * Select the tuples satisfying the given simple condition on attributes/constants
      * compared using an <op> ==, !=, <, <=, >, >=.
      *
      * #usage movie.select ("year == 1977")
-     *
+     * @author Nehaa Umapathy
      * @param condition  the check condition as a string for tuples
      * @return  a table with tuples satisfying the condition
      */
@@ -250,26 +258,26 @@ public class Table
         var t_A = t[colNo];
         out.println (STR."satisfies: \{t_A} \{op} \{value}");
         var valt = switch (domain [colNo].getSimpleName ()) {      // type converted
-        case "Byte"      -> Byte.valueOf (value);
-        case "Character" -> value.charAt (0);
-        case "Double"    -> Double.valueOf (value);
-        case "Float"     -> Float.valueOf (value);
-        case "Integer"   -> Integer.valueOf (value);
-        case "Long"      -> Long.valueOf (value);
-        case "Short"     -> Short.valueOf (value);
-        case "String"    -> value;
-        default          -> value;
+            case "Byte"      -> Byte.valueOf (value);
+            case "Character" -> value.charAt (0);
+            case "Double"    -> Double.valueOf (value);
+            case "Float"     -> Float.valueOf (value);
+            case "Integer"   -> Integer.valueOf (value);
+            case "Long"      -> Long.valueOf (value);
+            case "Short"     -> Short.valueOf (value);
+            case "String"    -> value;
+            default          -> value;
         }; // switch
         var comp = t_A.compareTo (valt);
 
         return switch (op) {
-        case "==" -> comp == 0;
-        case "!=" -> comp != 0;
-        case "<"  -> comp <  0;
-        case "<=" -> comp <= 0;
-        case ">"  -> comp >  0;
-        case ">=" -> comp >= 0;
-        default   -> false;
+            case "==" -> comp == 0;
+            case "!=" -> comp != 0;
+            case "<"  -> comp <  0;
+            case "<=" -> comp <= 0;
+            case ">"  -> comp >  0;
+            case ">=" -> comp >= 0;
+            default   -> false;
         }; // switch
     } // satifies
 
@@ -292,11 +300,12 @@ public class Table
     } // select
 
     /************************************************************************************
-     * Armaity
+     * 
      * Union this table and table2.  Check that the two tables are compatible.
      *
      * #usage movie.union (show)
      *
+     * @author Armaity Katki
      * @param table2  the rhs table in the union operation
      * @return  a table representing the union
      */
@@ -307,18 +316,19 @@ public class Table
 
         List<Comparable[]> rows = new ArrayList<>(this.tuples);
 
-        rows.addAll(table2.tuples);
+        rows.addAll(table2.tuples); //adds all the tuples of table2 to table1
 
         return new Table (name + count++, attribute, domain, key, rows);
     } // union
 
     /************************************************************************************
-     * Armaity
+     * 
      * Take the difference of this table and table2.  Check that the two tables are
      * compatible.
      *
      * #usage movie.minus (show)
      *
+     * @author Armaity Katki
      * @param table2  The rhs table in the minus operation
      * @return  a table representing the difference
      */
@@ -339,7 +349,7 @@ public class Table
     } // minus
 
     /************************************************************************************
-     * Ruthvik
+     * 
      * Join this table and table2 by performing an "equi-join".  Tuples from both tables
      * are compared requiring attributes1 to equal attributes2.  Disambiguate attribute
      * names by appending "2" to the end of any duplicate attribute name.  Implement using
@@ -347,6 +357,7 @@ public class Table
      *
      * #usage movie.join ("studioName", "name", studio)
      *
+     * @author Ruthvik Mankari
      * @param attributes1  the attributes of this table to be compared (Foreign Key)
      * @param attributes2  the attributes of table2 to be compared (Primary Key)
      * @param table2       the rhs table in the join operation
@@ -397,17 +408,17 @@ public class Table
 
         // Return the result table with new attributes and matching tuples
         return new Table (name + count++, newAttributesArray,
-                                          concat (domain, table2.domain), concat(key,table2.key), rows);
+                concat (domain, table2.domain), concat(key,table2.key), rows);
     } // join
 
     /************************************************************************************
-     * Ruthvik
+     * 
      * Join this table and table2 by performing a "theta-join".  Tuples from both tables
      * are compared attribute1 <op> attribute2.  Disambiguate attribute names by appending "2"
      * to the end of any duplicate attribute name.  Implement using a Nested Loop Join algorithm.
      *
      * #usage movie.join ("studioName == name", studio)
-     *
+     * @author Ruthvik Mankari
      * @param condition  the theta join condition
      * @param table2     the rhs table in the join operation
      * @return  a table with tuples satisfying the condition
@@ -428,8 +439,8 @@ public class Table
         for (var Table1_Tuple : this.tuples) {
             for (var Table2_Tuple : table2.tuples) {
                 boolean flag = true;
-                    int attribute1_index = col(attribute1);
-                    int attribute2_index = table2.col(attribute2);
+                int attribute1_index = col(attribute1);
+                int attribute2_index = table2.col(attribute2);
 
                 //Switch based on operator and perform the operation accordingly
                 switch (op) {
@@ -476,7 +487,7 @@ public class Table
 
         // Return the result table with new attributes and matching tuples
         return new Table (name + count++, newAttributesArray,
-                                          concat (domain, table2.domain), concat(key,table2.key), rows);
+                concat (domain, table2.domain), concat(key,table2.key), rows);
     } // join
 
     /************************************************************************************
@@ -497,28 +508,71 @@ public class Table
     } // i_join
 
     /************************************************************************************
-     * Luke
      * Join this table and table2 by performing an NATURAL JOIN.  Tuples from both tables
      * are compared requiring common attributes to be equal.  The duplicate column is also
      * eliminated.
      *
      * #usage movieStar.join (starsIn)
      *
+     * @author Luke Zimmerman
      * @param table2  the rhs table in the join operation
      * @return  a table with tuples satisfying the equality predicate
      */
     public Table join (Table table2)
     {
-        out.println (STR."RA> \{name}.join (\{table2.name})");
+        out.println("RA> " + name + ".join (" + table2.name + ")");
+
+        List<String> attList = new ArrayList<>(Arrays.asList(this.attribute)); // Putting all attributes and domains into a list
+        List<Class> domList = new ArrayList<>(Arrays.asList(this.domain));
+
+        for (int i = 0; i < table2.attribute.length; i++){ // adding all attributes and domains, making sure to avoid duplicates.
+            if (!attList.contains(table2.attribute[i])){
+                attList.add(table2.attribute[i]);
+                domList.add(table2.domain[i]);
+            }
+        }
+        String[] newAtt = attList.toArray (new String[attList.size()]); // Converting to arrays for later use
+        Class[] newDom = domList.toArray (new Class[domList.size()]);
+
+        List<String> commonAtt = new ArrayList<>(); // ArrayList for common attributes
+        for (String att : this.attribute){ // Checks to see if the columns are equal
+            if (table2.col(att) != -1){
+                commonAtt.add(att);
+            }
+        }
 
         var rows = new ArrayList <Comparable []> ();
+        for (Comparable[] tup1: this.tuples){ // Comparing tuples (rows) to find matches
+            for (Comparable[] tup2: table2.tuples){
+                boolean found = true;
+                for (String att: commonAtt){
+                    int col1 = this.col(att);
+                    int col2 = table2.col(att);
+                    if (!tup1[col1].equals(tup2[col2])){ // using col() helper method to determine if attributes are equal
+                        found = false;                     // if they aren't equal, break the loop and move onto the next
+                        break;
+                    }
+                }
+                if (found) { // if they are equal after that loop completes
+                    Comparable[] newTup = new Comparable[this.attribute.length + (table2.attribute.length - commonAtt.size())]; // make a Comparable[] big enough to store all elements with no duplicates
+                    for (int i = 0; i < this.attribute.length; i++) { // add all attributes from this table to the new array
+                        newTup[i] = tup1[i];
+                    }
+                    int idx = this.attribute.length;
+                    for (int i = 0; i < table2.attribute.length; i++) { // add all attributes from table 2 but ensure no duplicates
+                        if (!commonAtt.contains(table2.attribute[i])) {
+                            newTup[idx] = tup2[i];
+                            idx++;
+                        }
+                    }
+                    rows.add(newTup); // add the completed Comparable [] to the row arraylist
+                }
+            }
+        }
 
-        //  T O   B E   I M P L E M E N T E D 
-
-        // FIX - eliminate duplicate columns
-        return new Table (name + count++, concat (attribute, table2.attribute),
-                                          concat (domain, table2.domain), key, rows);
+        return new Table (name + count++, newAtt, newDom, this.key, rows); // completed join statement
     } // join
+
 
     /************************************************************************************
      * Return the column position for the given attribute name or -1 if not found.
@@ -529,7 +583,7 @@ public class Table
     public int col (String attr)
     {
         for (var i = 0; i < attribute.length; i++) {
-           if (attr.equals (attribute [i])) return i;
+            if (attr.equals (attribute [i])) return i;
         } // for
 
         return -1;       // -1 => not found
@@ -610,7 +664,7 @@ public class Table
     } // printIndex
 
     /************************************************************************************
-     * Load the table with the given name into memory. 
+     * Load the table with the given name into memory.
      *
      * @param name  the name of the table to load
      */
@@ -701,7 +755,7 @@ public class Table
      *
      * @param t       the tuple to extract from
      * @param column  the array of column names
-     * @return  a smaller tuple extracted from tuple t 
+     * @return  a smaller tuple extracted from tuple t
      */
     private Comparable [] extract (Comparable [] t, String [] column)
     {
@@ -712,19 +766,30 @@ public class Table
     } // extract
 
     /************************************************************************************
-     * Luke
      * Check the size of the tuple (number of elements in array) as well as the type of
-     * each value to ensure it is from the right domain. 
+     * each value to ensure it is from the right domain.
      *
-     * @param t  the tuple as a array of attribute values
+     * @author Luke Zimmerman
+     * @param t import jdk.javadoc.internal.doclets.formats.html.Table; the tuple as a array of attribute values
      * @return  whether the tuple has the right size and values that comply
      *          with the given domains
      */
     private boolean typeCheck (Comparable [] t)
-    { 
-        //  T O   B E   I M P L E M E N T E D 
-
-        return true;      // change once implemented
+    {
+        boolean typeCheck = true; // boolean to be returned based on code
+        if (this.attribute.length == t.length){ // checking length of new tuple to see if it is correct length for table
+            for (int i = 0; i < t.length; i++) { // for each element in the t array
+                if (this.domain[i].equals(t[i].getClass())){ // if the elements have equal classes, continue the method
+                    continue;
+                } else { // if classes are at any point unequal, make typeCheck boolean false and end the loop
+                    typeCheck = false;
+                    break;
+                }
+            }
+        } else { // if lengths are unequal, automatically can assume that they are not compatible
+            typeCheck = false;
+        }
+        return typeCheck;
     } // typeCheck
 
     /************************************************************************************
@@ -767,4 +832,3 @@ public class Table
     } // extractDom
 
 } // Table
-
