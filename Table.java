@@ -408,7 +408,7 @@ public class Table
 
         // Return the result table with new attributes and matching tuples
         return new Table (name + count++, newAttributesArray,
-                concat (domain, table2.domain), concat(key,table2.key), rows);
+                concat (domain, table2.domain), key, rows);
     } // join
 
     /************************************************************************************
@@ -487,7 +487,7 @@ public class Table
 
         // Return the result table with new attributes and matching tuples
         return new Table (name + count++, newAttributesArray,
-                concat (domain, table2.domain), concat(key,table2.key), rows);
+                concat (domain, table2.domain), key, rows);
     } // join
 
     /************************************************************************************
