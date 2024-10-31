@@ -1,4 +1,3 @@
-
 /*****************************************************************************************
  * @file  MovieDB.java
  *
@@ -23,22 +22,22 @@ class MovieDB
         out.println ();
 
         var movie = new Table ("movie", "title year length genre studioName producerNo",
-                                        "String Integer Integer String String Integer", "title year");
+                "String Integer Integer String String Integer", "title year");
 
         var cinema = new Table ("cinema", "title year length genre studioName producerNo",
-                                          "String Integer Integer String String Integer", "title year");
+                "String Integer Integer String String Integer", "title year");
 
         var movieStar = new Table ("movieStar", "name address gender birthdate",
-                                                "String String Character String", "name");
+                "String String Character String", "name");
 
         var starsIn = new Table ("starsIn", "movieTitle movieYear starName",
-                                            "String Integer String", "movieTitle movieYear starName");
+                "String Integer String", "movieTitle movieYear starName");
 
         var movieExec = new Table ("movieExec", "certNo name address fee",
-                                                "Integer String String Float", "certNo");
+                "Integer String String Float", "certNo");
 
         var studio = new Table ("studio", "name address presNo",
-                                          "String String Integer", "name");
+                "String String Integer", "name");
 
         var film0 = new Comparable [] { "Star_Wars", 1977, 124, "sciFi", "Fox", 12345 };
         var film1 = new Comparable [] { "Star_Wars_2", 1980, 124, "sciFi", "Fox", 12345 };
@@ -96,32 +95,32 @@ class MovieDB
 
         movieStar.printIndex ();
 
-        //--------------------- project: title year
-
-        out.println ();
-        var t_project = movie.project ("title year");
-        t_project.print ();
-
-        //--------------------- select: equals, &&
-
-        out.println ();
-        var t_select = movie.select (t -> t[movie.col("title")].equals ("Star_Wars") &&
-                                          t[movie.col("year")].equals (1977));
-        t_select.print ();
-
-        //--------------------- select: <
-
-        out.println ();
-        var t_select2 = movie.select (t -> (Integer) t[movie.col("year")] < 1980);
-        t_select2.print ();
-
-        //--------------------- select (condition): <
-
-        out.println ();
-        var t_select3 = movie.select ("year < 1980");
-        t_select3.print ();
-
-        //--------------------- indexed select: key
+//        //--------------------- project: title year
+//
+//        out.println ();
+//        var t_project = movie.project ("title year");
+//        t_project.print ();
+//
+//        //--------------------- select: equals, &&
+//
+//        out.println ();
+//        var t_select = movie.select (t -> t[movie.col("title")].equals ("Star_Wars") &&
+//                t[movie.col("year")].equals (1977));
+//        t_select.print ();
+//
+//        //--------------------- select: <
+//
+//        out.println ();
+//        var t_select2 = movie.select (t -> (Integer) t[movie.col("year")] < 1980);
+//        t_select2.print ();
+//
+//        //--------------------- select (condition): <
+//
+//        out.println ();
+//        var t_select3 = movie.select ("year < 1980");
+//        t_select3.print ();
+//
+//        //--------------------- indexed select: key
 
         out.println ();
         var t_iselect = movieStar.select (new KeyType ("Harrison_Ford"));
@@ -129,27 +128,27 @@ class MovieDB
 
         //--------------------- union: movie UNION cinema
 
-        out.println ();
-        var t_union = movie.union (cinema);
-        t_union.print ();
+        //out.println ();
+        //var t_union = movie.union (cinema);
+       // t_union.print ();
 
         //--------------------- minus: movie MINUS cinema
 
-        out.println ();
-        var t_minus = movie.minus (cinema);
-        t_minus.print ();
-
-        //--------------------- equi-join: movie JOIN studio ON studioName = name
-
-        out.println ();
-        var t_join = movie.join ("studioName", "name", studio);
-        t_join.print ();
-
-        //--------------------- natural join: movie JOIN studio
-
-        out.println ();
-        var t_join2 = movie.join (cinema);
-        t_join2.print ();
+//        out.println ();
+//       // var t_minus = movie.minus (cinema);
+//        //t_minus.print ();
+//
+//        //--------------------- equi-join: movie JOIN studio ON studioName = name
+//
+//        out.println ();
+//        var t_join = movie.join ("studioName", "name", studio);
+//        t_join.print ();
+//
+//        //--------------------- natural join: movie JOIN studio
+//
+//        out.println ();
+//        var t_join2 = movie.join (cinema);
+//        t_join2.print ();
 
     } // main
 
